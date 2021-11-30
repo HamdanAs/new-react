@@ -1,7 +1,7 @@
 import instance from "../http-common";
+import { Constants } from "../utils/Constants";
 
-const token =
-  "?token=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.ewogICJ1c2VybmFtZSI6ICJhZG1pbiIsCiAgInRpbWVzdGFtcCI6IDE2MzgwNzQyODAxOTMKfQ.XnZNfcQWQTk1CcJdotA1ifgXOe5U8UK6Qq4PY4On094";
+const token = Constants.token
 
 const getAll = () => {
   return instance.get("/med" + token);

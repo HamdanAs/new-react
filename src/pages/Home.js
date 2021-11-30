@@ -1,17 +1,27 @@
-import React from "react";
+import React, { useState } from "react";
 import { Button, Image } from "react-bootstrap";
-
-import { Items } from ".";
+import { midContainer } from "../styles/styles";
+import { Login } from "./Auth/Login";
 
 const Home = () => {
-  return (
-    <div className="mt-5">
-      <Image src="illust.png" width="400"></Image>
+  const [show, setShow] = useState(false)
 
+  const handleClose = () => setShow(false)
+  const handleShow = () => setShow(true)
+
+  return (
+    <div style={midContainer}>
       <div>
-        <h3 className="mt-3">Aplikasi Kasir</h3>
-        <h5 className="mt-3">Silahkan login terlebih dahulu</h5>
-        <Button>Login</Button>
+        <Image src="illust.png" width="400"></Image>
+
+        <div>
+          <h3 className="mt-3">Aplikasi Kasir</h3>
+          <h5 className="mt-3">Silahkan login terlebih dahulu</h5>
+
+          <Button onClick={handleShow}>Login</Button>
+
+          <Login show={show} handleClose={handleClose}></Login>
+        </div>
       </div>
     </div>
   );

@@ -1,16 +1,22 @@
-import React from "react";
+import React, { useState } from "react";
 import ItemsList from "../components/ItemComponents/ItemsList";
 import { Container, Form, FormControl, Button } from "react-bootstrap";
 import { Link } from "react-router-dom";
 import { container, midContainer } from "../styles/styles";
 import AuthService from "../services/AuthService";
 import { useHistory } from "react-router-dom";
+import AddItem from "../components/ItemComponents/AddItem";
 
 const Items = () => {
-  const history = useHistory()
-  
-  if(!AuthService.getCurrentUser()){
-          history.push("/")
+  const [show, setShow] = useState(false);
+
+  const handleClose = () => setShow(false);
+  const handleShow = () => setShow(true);
+
+  const history = useHistory();
+
+  if (AuthService.getCurrentUser() == null) {
+    history.push("/");
   }
 
   return (
@@ -30,17 +36,17 @@ const Items = () => {
           <ItemsList></ItemsList>
         </Container>
         <div className="bg-primary">
-          <Button variant="primary">
-            <Link
-              to="/items/add"
-              style={container.noneDecoration}
-              className="text-light decoration-none"
-            >
-              Tambah Data
-            </Link>
+          <Button
+            variant="primary"
+            onClick={handleShow}
+            style={container.noneDecoration}
+          >
+            Tambah Data
           </Button>
         </div>
       </div>
+
+      <AddItem show={show} handleClose={handleClose}></AddItem>
     </Container>
   );
 };

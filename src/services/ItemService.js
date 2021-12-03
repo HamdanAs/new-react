@@ -1,7 +1,8 @@
 import instance from "../http-common";
 import { Constants } from "../utils/Constants";
+import AuthService from "./AuthService";
 
-const token = Constants.token
+const token = "?token=" + AuthService.getCurrentUser().result;
 
 const getAll = () => {
   return instance.get("/med" + token);

@@ -2,15 +2,23 @@ import React from "react";
 import { Button, Container, Nav, Navbar, NavDropdown } from "react-bootstrap";
 import { Link } from "react-router-dom";
 import AuthService from "../services/AuthService";
+import { Constants } from "../utils/Constants";
 
 export const NavbarComponent = () => {
- 
   const checkUser = () => {
-    if(!AuthService.getCurrentUser()){
-      alert("Silahkan login terlebih dahulu!")      
+    if (!AuthService.getCurrentUser()) {
+      alert("Silahkan login terlebih dahulu!");
     }
-  }
-  
+  };
+
+  const handleLogout = () => {
+    if (Constants.token) {
+      AuthService.logout();
+
+      window.location.reload();
+    }
+  };
+
   return (
     <Navbar bg="primary" variant="dark" expand="lg">
       <Container>
@@ -34,7 +42,14 @@ export const NavbarComponent = () => {
                 Retur
               </NavDropdown.Item>
             </NavDropdown>
-            <Button variant="danger" className="ms-5" onClick={() => AuthService.logout()}>Logout</Button>
+            <Button
+              variant="danger"
+              className="ms-5"
+              className={Constants.token ? "d-block" : "d-none"}
+              onClick={handleLogout}
+            >
+              Logout
+            </Button>
           </Nav>
         </Navbar.Collapse>
       </Container>

@@ -16,8 +16,8 @@ const ItemsList = (props) => {
     retrieveItems();
   }, []);
 
-  const retrieveItems = () => {
-    getAll()
+  const retrieveItems = async () => {
+    await getAll()
       .then((response) => {
         setItems(response.data.result);
         console.log(response.data);

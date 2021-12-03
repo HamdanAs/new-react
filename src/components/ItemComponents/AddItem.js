@@ -1,7 +1,10 @@
 import React, { useState } from "react";
+import { Form, Modal, Button } from "react-bootstrap";
 import { create } from "../../services/ItemService";
 
-const AddItem = () => {
+const AddItem = (props) => {
+  let show = props.show
+
   const initialItemState = {
     id: null,
     name: "",
@@ -16,11 +19,14 @@ const AddItem = () => {
     setItem({ ...item, [name]: value });
   };
 
-  const saveItem = () => {
-    var data = {
+  const saveItem = (e) => {
+    e.preventDefault();
+
+    let data = {
       name: item.name,
-      basePrice: item.basePrice,
+      base_price: item.basePrice,
       price: item.price,
+      description: "description",
     };
 
     create(data)
@@ -28,7 +34,7 @@ const AddItem = () => {
         setItem({
           id: response.data.id,
           name: response.data.name,
-          basePrice: response.data.basePrice,
+          basePrice: response.data.base_price,
           price: response.data.price,
         });
         setSubmitted(true);
@@ -45,61 +51,52 @@ const AddItem = () => {
   };
 
   return (
-    <div className="submit-form">
-      {submitted ? (
-        <div>
-          <h4>You submitted successfully!</h4>
-          <button className="btn btn-success" onClick={newItem}>
-            Add
-          </button>
-        </div>
-      ) : (
-        <div>
-          <div className="form-group">
-            <label htmlFor="title">Name</label>
-            <input
+    <Modal show={props.show} onHide={props.handleClose}>
+      <Modal.Header closeButton>
+        <Modal.Title>Tambah data barang</Modal.Title>
+      </Modal.Header>
+
+      <Modal.Body>
+        <Form onSubmit={saveItem}>
+          <Form.Group className="mb-3" controlId="">
+            <Form.Label>Nama Barang</Form.Label>
+            <Form.Control
               type="text"
-              className="form-control"
-              id="title"
-              required
+              placeholder=""
               value={item.name}
               onChange={handleInputChange}
-              name="title"
+              name="name"
             />
-          </div>
+          </Form.Group>
 
-          <div className="form-group">
-            <label htmlFor="description">Base Price</label>
-            <input
+          <Form.Group className="mb-3" controlId="">
+            <Form.Label>Harga Beli</Form.Label>
+            <Form.Control
               type="text"
-              className="form-control"
-              id="description"
-              required
+              placeholder=""
               value={item.basePrice}
               onChange={handleInputChange}
-              name="description"
+              name="basePrice"
             />
-          </div>
+          </Form.Group>
 
-          <div className="form-group">
-            <label htmlFor="description">Price</label>
-            <input
+          <Form.Group className="mb-3" controlId="">
+            <Form.Label>Harga Jual</Form.Label>
+            <Form.Control
               type="text"
-              className="form-control"
-              id="description"
-              required
+              placeholder=""
               value={item.price}
               onChange={handleInputChange}
-              name="description"
+              name="price"
             />
-          </div>
+          </Form.Group>
 
-          <button onClick={saveItem} className="btn btn-success">
-            Submit
-          </button>
-        </div>
-      )}
-    </div>
+          <Button variant="primary" type="submit">
+            Simpan Data
+          </Button>
+        </Form>
+      </Modal.Body>
+    </Modal>
   );
 };
 

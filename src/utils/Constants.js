@@ -1,7 +1,7 @@
-import AuthService from "../services/AuthService"
+import AuthService from "../services/AuthService";
 
-const Constants= {
-    token: "?token=" + !AuthService.getCurrentUser().result ? null : AuthService.getCurrentUser().result
-}
+let Constants = {
+  token: null,
+};
 
-export {Constants}
+export { Constants };

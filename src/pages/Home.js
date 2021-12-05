@@ -1,13 +1,15 @@
 import React, { useState } from "react";
 import { Button, Image } from "react-bootstrap";
+import { Link } from "react-router-dom";
 import { midContainer } from "../styles/styles";
 import { Login } from "./Auth/Login";
+import { useHistory } from "react-router";
 
 const Home = () => {
-  const [show, setShow] = useState(false)
-
-  const handleClose = () => setShow(false)
-  const handleShow = () => setShow(true)
+  const history = useHistory();
+  const handleLogin = (e) => {
+    history.push("/login");
+  };
 
   return (
     <div style={midContainer}>
@@ -18,9 +20,9 @@ const Home = () => {
           <h3 className="mt-3">Aplikasi Kasir</h3>
           <h5 className="mt-3">Silahkan login terlebih dahulu</h5>
 
-          <Button onClick={handleShow}>Login</Button>
-
-          <Login show={show} handleClose={handleClose}></Login>
+          <Button as={Link} onClick={handleLogin}>
+            Login
+          </Button>
         </div>
       </div>
     </div>

@@ -1,101 +1,116 @@
 import React, { useState } from "react";
-import { Form, Modal, Button } from "react-bootstrap";
-import { create } from "../../services/ItemService";
+import { Form, Button, Modal } from "react-bootstrap";
+import { useSetRecoilState, useRecoilValue } from "recoil";
+import { items } from "../../store";
+import { v4 as uuid4 } from "uuid";
 
 const AddItem = (props) => {
-  let show = props.show
+  const [name, setName] = useState("");
+  const [price, setPrice] = useState(0);
+  const [basePrice, setBasePrice] = useState(0);
+  const [description, setDescription] = useState("");
+  const setItems = useSetRecoilState(items);
+  const itemList = useRecoilValue(items);
 
-  const initialItemState = {
-    id: null,
-    name: "",
-    basePrice: 0,
-    price: 0,
-  };
-  const [item, setItem] = useState(initialItemState);
-  const [submitted, setSubmitted] = useState(false);
+  const { show, close } = props;
 
-  const handleInputChange = (event) => {
-    const { name, value } = event.target;
-    setItem({ ...item, [name]: value });
+  const onChangeName = (e) => {
+    setName(e.target.value);
   };
 
-  const saveItem = (e) => {
-    e.preventDefault();
-
-    let data = {
-      name: item.name,
-      base_price: item.basePrice,
-      price: item.price,
-      description: "description",
-    };
-
-    create(data)
-      .then((response) => {
-        setItem({
-          id: response.data.id,
-          name: response.data.name,
-          basePrice: response.data.base_price,
-          price: response.data.price,
-        });
-        setSubmitted(true);
-        console.log(response.data);
-      })
-      .catch((e) => {
-        console.log(e);
-      });
+  const onChangePrice = (e) => {
+    setPrice(e.target.value);
   };
 
-  const newItem = () => {
-    setItem(initialItemState);
-    setSubmitted(false);
+  const onChangeBasePrice = (e) => {
+    setBasePrice(e.target.value);
+  };
+
+  const onChangeDescription = (e) => {
+    setDescription(e.target.value);
+  };
+
+  const addItem = () => {
+    setItems((oldList) => [
+      ...oldList,
+      {
+        id: uuid4(),
+        name: name,
+        price: price,
+        basePrice: basePrice,
+        description: description,
+      },
+    ]);
+
+    resetForm();
+    close();
+
+    console.log(itemList);
+  };
+
+  const resetForm = () => {
+    setName("");
+    setPrice(0);
+    setBasePrice(0);
+    setDescription("");
   };
 
   return (
-    <Modal show={props.show} onHide={props.handleClose}>
+    <Modal show={show} onHide={close}>
       <Modal.Header closeButton>
-        <Modal.Title>Tambah data barang</Modal.Title>
+        <Modal.Title>Tambah barang</Modal.Title>
       </Modal.Header>
-
       <Modal.Body>
-        <Form onSubmit={saveItem}>
-          <Form.Group className="mb-3" controlId="">
-            <Form.Label>Nama Barang</Form.Label>
+        <Form>
+          <Form.Group controlId="name">
+            <Form.Label>Name:</Form.Label>
             <Form.Control
               type="text"
-              placeholder=""
-              value={item.name}
-              onChange={handleInputChange}
-              name="name"
+              value={name}
+              placeholder="Enter the Product Name"
+              onChange={(e) => onChangeName(e)}
             />
           </Form.Group>
 
-          <Form.Group className="mb-3" controlId="">
-            <Form.Label>Harga Beli</Form.Label>
+          <Form.Group controlId="basePrice">
+            <Form.Label>Base Price:</Form.Label>
             <Form.Control
-              type="text"
-              placeholder=""
-              value={item.basePrice}
-              onChange={handleInputChange}
-              name="basePrice"
+              type="number"
+              value={basePrice}
+              placeholder="Enter the Product base price"
+              onChange={(e) => onChangeBasePrice(e)}
             />
           </Form.Group>
 
-          <Form.Group className="mb-3" controlId="">
-            <Form.Label>Harga Jual</Form.Label>
+          <Form.Group controlId="price">
+            <Form.Label>Price:</Form.Label>
             <Form.Control
-              type="text"
-              placeholder=""
-              value={item.price}
-              onChange={handleInputChange}
-              name="price"
+              type="number"
+              value={price}
+              placeholder="Enter the Product price"
+              onChange={(e) => onChangePrice(e)}
             />
           </Form.Group>
 
-          <Button variant="primary" type="submit">
-            Simpan Data
-          </Button>
+          <Form.Group controlId="Description">
+            <Form.Label>Description:</Form.Label>
+            <Form.Control
+              type="text"
+              value={description}
+              placeholder="Enter the Product Description"
+              onChange={(e) => onChangeDescription(e)}
+            />
+          </Form.Group>
         </Form>
       </Modal.Body>
+      <Modal.Footer>
+        <Button variant="primary" onClick={() => addItem()}>
+          Add
+        </Button>
+        <Button variant="secondary" onClick={close}>
+          Close
+        </Button>
+      </Modal.Footer>
     </Modal>
   );
 };

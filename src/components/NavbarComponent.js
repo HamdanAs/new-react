@@ -1,55 +1,64 @@
 import React from "react";
 import { Button, Container, Nav, Navbar, NavDropdown } from "react-bootstrap";
 import { Link } from "react-router-dom";
+import { useHistory } from "react-router";
 import AuthService from "../services/AuthService";
-import { Constants } from "../utils/Constants";
 
 export const NavbarComponent = () => {
-  const checkUser = () => {
-    if (!AuthService.getCurrentUser()) {
-      alert("Silahkan login terlebih dahulu!");
-    }
-  };
+  const history = useHistory();
 
   const handleLogout = () => {
-    if (Constants.token) {
-      AuthService.logout();
-
-      window.location.reload();
-    }
+    AuthService.logout();
+    history.push("/");
   };
 
   return (
     <Navbar bg="primary" variant="dark" expand="lg">
       <Container>
-        <Navbar.Brand className="w-50" as={Link} to="/">
+        <Navbar.Brand className="ms-auto" as={Link} to="/">
           Aplikasi Kasir
         </Navbar.Brand>
         <Navbar.Toggle aria-controls="basic-navbar-nav" />
         <Navbar.Collapse id="basic-navbar-nav">
           <Nav className="me-auto">
-            <Nav.Link as={Link} to="/items" onClick={checkUser}>
+            <Nav.Link as={Link} to="/items">
               Data Barang
             </Nav.Link>
             <NavDropdown title="Transaksi" id="basic-nav-dropdown">
-              <NavDropdown.Item as={Link} to="/penjualan" onClick={checkUser}>
+              <NavDropdown.Item as={Link} to="/penjualan">
                 Penjualan
               </NavDropdown.Item>
-              <NavDropdown.Item as={Link} to="/pembelian" onClick={checkUser}>
+              <NavDropdown.Item as={Link} to="/pembelian">
                 Pembelian
               </NavDropdown.Item>
-              <NavDropdown.Item as={Link} to="/retur" onClick={checkUser}>
+              <NavDropdown.Item as={Link} to="/retur">
                 Retur
               </NavDropdown.Item>
             </NavDropdown>
-            <Button
-              variant="danger"
-              className="ms-5"
-              className={Constants.token ? "d-block" : "d-none"}
-              onClick={handleLogout}
-            >
-              Logout
-            </Button>
+          </Nav>
+          <Nav>
+            {AuthService.getCurrentUser().checked ? (
+              <NavDropdown
+                title={AuthService.getCurrentUser().username}
+                id="basic-nav-dropdown"
+              >
+                <NavDropdown.Item as={Link} to="/profile">
+                  Profil
+                </NavDropdown.Item>
+                <NavDropdown.Item onClick={handleLogout}>
+                  Logout
+                </NavDropdown.Item>
+              </NavDropdown>
+            ) : (
+              <>
+                <Nav.Link as={Link} to="/login">
+                  Login
+                </Nav.Link>
+                <Nav.Link as={Link} to="/register">
+                  Register
+                </Nav.Link>
+              </>
+            )}
           </Nav>
         </Navbar.Collapse>
       </Container>

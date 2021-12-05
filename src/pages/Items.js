@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import ItemsList from "../components/ItemComponents/ItemsList";
 import { Container, Form, FormControl, Button } from "react-bootstrap";
 import { Link } from "react-router-dom";
@@ -6,6 +6,8 @@ import { container, midContainer } from "../styles/styles";
 import AuthService from "../services/AuthService";
 import { useHistory } from "react-router-dom";
 import AddItem from "../components/ItemComponents/AddItem";
+import { useRecoilValue } from "recoil";
+import { FilterItem } from "../components/ItemComponents/FilterItem";
 
 const Items = () => {
   const [show, setShow] = useState(false);
@@ -15,6 +17,23 @@ const Items = () => {
 
   const history = useHistory();
 
+  const [items, setItems] = useState([]);
+  const itemsRef = useRef(items);
+
+  itemsRef.current = items;
+
+  useEffect(() => {
+    retrieveItems();
+  }, [items]);
+
+  const retrieveItems = () => {};
+
+  const refreshItems = () => {
+    let newItem = [...itemsRef.current];
+
+    setItems(newItem);
+  };
+
   if (AuthService.getCurrentUser() == null) {
     history.push("/");
   }
@@ -23,30 +42,28 @@ const Items = () => {
     <Container style={midContainer}>
       <div className="shadow-lg">
         <div style={container.header} className="py-3 bg-primary">
-          <Form className="d-flex w-50 mx-auto">
-            <FormControl
-              className="me-2"
-              type="search"
-              placeholder="Cari barang..."
-              aria-label="Search"
-            />
-          </Form>
+          <FilterItem />
         </div>
         <Container className="bg-light mt-3" style={container.containerSize}>
           <ItemsList></ItemsList>
         </Container>
-        <div className="bg-primary">
+        <div className="bg-primary text-center">
           <Button
             variant="primary"
             onClick={handleShow}
             style={container.noneDecoration}
+            className=""
           >
             Tambah Data
           </Button>
         </div>
       </div>
 
-      <AddItem show={show} handleClose={handleClose}></AddItem>
+      <AddItem
+        show={show}
+        close={handleClose}
+        refreshItems={refreshItems}
+      ></AddItem>
     </Container>
   );
 };

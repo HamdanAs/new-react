@@ -2,30 +2,28 @@ import instance from "../http-common";
 import { Constants } from "../utils/Constants";
 import AuthService from "./AuthService";
 
-const token = "?token=" + AuthService.getCurrentUser().result;
-
-const getAll = () => {
-  return instance.get("/med" + token);
+const getAll = (token) => {
+  return instance.get("/med?token=" + token);
 };
 
-const get = (id) => {
-  return instance.get(`/med/27` + token);
+const get = (id, token) => {
+  return instance.get(`/med/27?token=` + token);
 };
 
-const create = (data) => {
-  return instance.post("/med" + token, data);
+const create = (data, token) => {
+  return instance.post("/med?token=" + token, data);
 };
 
-const update = (id, data) => {
-  return instance.put(`/med/${id}` + token, data);
+const update = (id, data, token) => {
+  return instance.put(`/med/${id}?token=` + token, data);
 };
 
-const remove = (id) => {
-  return instance.delete(`/med/${id}` + token);
+const remove = (id, token) => {
+  return instance.delete(`/med/${id}?token=` + token);
 };
 
-const removeAll = () => {
-  return instance.delete(`/med` + token);
+const removeAll = (token) => {
+  return instance.delete(`/med?token=` + token);
 };
 
 export { getAll, get, create, update, remove, removeAll };

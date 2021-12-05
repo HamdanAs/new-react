@@ -1,4 +1,6 @@
+import { useRecoilState } from "recoil";
 import instance from "../http-common";
+import { authenticatedUser } from "../store";
 import { Constants } from "../utils/Constants";
 
 class AuthService {
@@ -7,8 +9,13 @@ class AuthService {
       .post("/login", { username, password })
       .then((response) => {
         if (response.data.result) {
-          localStorage.setItem("user", JSON.stringify(response.data));
-          Constants.token = this.getCurrentUser().result;
+          const userSession = {
+            checked: true,
+            token: response.data.result,
+            username: username,
+          };
+
+          localStorage.setItem("user", JSON.stringify(userSession));
         }
 
         return response.data;
@@ -24,7 +31,13 @@ class AuthService {
   }
 
   getCurrentUser() {
-    return JSON.parse(localStorage.getItem("user"));
+    return JSON.parse(localStorage.getItem("user")) == null
+      ? {
+          checked: false,
+          token: "",
+          username: "",
+        }
+      : JSON.parse(localStorage.getItem("user"));
   }
 }
 

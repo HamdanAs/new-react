@@ -2,17 +2,24 @@ import { Modal, Button } from "react-bootstrap";
 import React from "react";
 import { useRecoilState } from "recoil";
 import { items } from "../../store";
+import { remove } from "../../services/ItemService";
+import AuthService from "../../services/AuthService";
 
 export const DeleteItem = (props) => {
   const { show, id, handleClose } = props;
+  const { token } = AuthService.getCurrentUser();
 
   const [itemList, setItemList] = useRecoilState(items);
   const item = itemList.length ? itemList.find((it) => it.id === id) : null;
   const index = itemList.findIndex((it) => it === item);
 
   const deleteItem = () => {
-    setItemList(removeItem(itemList, index));
-    handleClose();
+    remove(id, token)
+      .then(() => {
+        setItemList(removeItem(itemList, index));
+        handleClose();
+      })
+      .catch((e) => console.log(e));
   };
 
   return (
@@ -20,15 +27,15 @@ export const DeleteItem = (props) => {
       {item ? (
         <Modal show={show} onHide={handleClose}>
           <Modal.Header closeButton>
-            <Modal.Title>Delete the Product</Modal.Title>
+            <Modal.Title>Hapus barang</Modal.Title>
           </Modal.Header>
-          <Modal.Body>Are you sure?</Modal.Body>
+          <Modal.Body>Apakah anda yakin?</Modal.Body>
           <Modal.Footer>
             <Button variant="secondary" onClick={() => handleClose()}>
-              Close
+              Tidak
             </Button>
             <Button variant="primary" onClick={() => deleteItem()}>
-              Yes, Do it.
+              Ya
             </Button>
           </Modal.Footer>
         </Modal>

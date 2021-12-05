@@ -8,6 +8,7 @@ export const FilterItem = () => {
 
   const filter = (e) => {
     const { value } = e.target;
+
     filterItems(value);
   };
 

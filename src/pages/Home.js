@@ -1,8 +1,7 @@
-import React, { useState } from "react";
+import React from "react";
 import { Button, Image } from "react-bootstrap";
 import { Link } from "react-router-dom";
 import { midContainer } from "../styles/styles";
-import { Login } from "./Auth/Login";
 import { useHistory } from "react-router";
 
 const Home = () => {

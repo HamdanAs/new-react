@@ -3,8 +3,6 @@ import { useTable } from "../../utils/useTable";
 import { TableFooter } from "./TableFooter";
 import styles from "./Table.module.css";
 import { ButtonGroup, Button } from "react-bootstrap";
-import AuthService from "../../services/AuthService";
-import { useHistory } from "react-router";
 import { UpdateItem } from "../ItemComponents/UpdateItem";
 import { DeleteItem } from "../ItemComponents/DeleteItem";
 
@@ -53,8 +51,8 @@ const Table = ({ data, rowsPerPage }) => {
                 </td>
               </tr>
             ) : (
-              slice.map((el) => (
-                <tr className={styles.tableRowItems} key={el.id}>
+              slice.map((el, index) => (
+                <tr className={styles.tableRowItems} key={index}>
                   <td className={styles.tableCell}>{el.name}</td>
                   <td className={styles.tableCell}>{el.basePrice}</td>
                   <td className={styles.tableCell}>{el.price}</td>

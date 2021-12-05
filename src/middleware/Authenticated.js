@@ -9,7 +9,7 @@ export default function Authenticated(props) {
     if (!AuthService.getCurrentUser().checked) {
       history.push("/login");
     }
-  }, []);
+  }, [history]);
 
   return props.render;
 }

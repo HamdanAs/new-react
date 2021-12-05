@@ -1,8 +1,10 @@
 import React, { useState } from "react";
 import { Form, Button, Modal } from "react-bootstrap";
-import { useSetRecoilState, useRecoilValue } from "recoil";
+import { useSetRecoilState } from "recoil";
 import { items } from "../../store";
 import { v4 as uuid4 } from "uuid";
+import { create } from "../../services/ItemService";
+import AuthService from "../../services/AuthService";
 
 const AddItem = (props) => {
   const [name, setName] = useState("");
@@ -10,7 +12,7 @@ const AddItem = (props) => {
   const [basePrice, setBasePrice] = useState(0);
   const [description, setDescription] = useState("");
   const setItems = useSetRecoilState(items);
-  const itemList = useRecoilValue(items);
+  const { token } = AuthService.getCurrentUser();
 
   const { show, close } = props;
 
@@ -31,21 +33,21 @@ const AddItem = (props) => {
   };
 
   const addItem = () => {
-    setItems((oldList) => [
-      ...oldList,
-      {
-        id: uuid4(),
-        name: name,
-        price: price,
-        basePrice: basePrice,
-        description: description,
-      },
-    ]);
+    let newItem = {
+      id: 0,
+      name: name,
+      description: description,
+      basePrice: basePrice,
+      price: price,
+    };
 
-    resetForm();
-    close();
-
-    console.log(itemList);
+    create(newItem, token)
+      .then(() => {
+        setItems((oldList) => [...oldList, newItem]);
+        resetForm();
+        close();
+      })
+      .catch((e) => console.log(e));
   };
 
   const resetForm = () => {

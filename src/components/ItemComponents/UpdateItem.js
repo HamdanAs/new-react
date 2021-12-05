@@ -48,7 +48,7 @@ export const UpdateItem = (props) => {
       {item ? (
         <Modal show={show} onHide={handleClose}>
           <Modal.Header closeButton>
-            <Modal.Title>Edit the Product</Modal.Title>
+            <Modal.Title>Edit Barang</Modal.Title>
           </Modal.Header>
           <Modal.Body>
             <Form>
@@ -95,10 +95,10 @@ export const UpdateItem = (props) => {
           </Modal.Body>
           <Modal.Footer>
             <Button variant="secondary" onClick={() => handleClose()}>
-              Close
+              Keluar
             </Button>
             <Button variant="primary" onClick={() => updateItem()}>
-              Save Changes
+              Simpan perubahan
             </Button>
           </Modal.Footer>
         </Modal>

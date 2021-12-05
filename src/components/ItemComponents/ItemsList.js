@@ -13,7 +13,7 @@ const ItemsList = (props) => {
     getAll(token).then((response) => {
       setItemsState(response.data.result);
     });
-  });
+  }, [setItemsState, token]);
 
   return <Table data={itemsState} rowsPerPage={5}></Table>;
 };

@@ -9,7 +9,7 @@ export default function Guest(props) {
     if (AuthService.getCurrentUser().checked) {
       history.push("/");
     }
-  }, []);
+  }, [history]);
 
   return props.render;
 }

@@ -9,7 +9,10 @@ export const filterItems = selector({
 
     if (filterItemsValueState.length) {
       return itemsState.filter(
-        (item) => item.name.includes(filterItemsValueState.trim()) && item
+        (item) =>
+          item.name
+            .toLowerCase()
+            .includes(filterItemsValueState.trim().toLowerCase()) && item
       );
     }
 

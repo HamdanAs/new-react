@@ -1,12 +1,10 @@
 import React, { useEffect, useRef, useState } from "react";
 import ItemsList from "../components/ItemComponents/ItemsList";
-import { Container, Form, FormControl, Button } from "react-bootstrap";
-import { Link } from "react-router-dom";
+import { Container, Button } from "react-bootstrap";
 import { container, midContainer } from "../styles/styles";
 import AuthService from "../services/AuthService";
 import { useHistory } from "react-router-dom";
 import AddItem from "../components/ItemComponents/AddItem";
-import { useRecoilValue } from "recoil";
 import { FilterItem } from "../components/ItemComponents/FilterItem";
 
 const Items = () => {
